@@ -7,6 +7,7 @@ import { HomePage } from '../pages/home/home';
 import {AboutPage} from '../pages/about/about';
 import {MenuPage} from '../pages/menu/menu';
 import {ContactPage} from '../pages/contact/contact';
+import {DishdetailPage} from '../pages/dishdetail/dishdetail';
 
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -17,13 +18,16 @@ import { PromotionProvider } from '../providers/promotion/promotion';
 import { ProcessHttpmsgProvider } from '../providers/process-httpmsg/process-httpmsg';
 import { HttpModule } from '@angular/http';
 import { baseURL } from '../shared/baseurl';
+import { FavoriteProvider } from '../providers/favorite/favorite';
+
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
    AboutPage,
    MenuPage,
-   ContactPage
+   ContactPage,
+   DishdetailPage
   ],
   imports: [
     BrowserModule,
@@ -36,7 +40,8 @@ import { baseURL } from '../shared/baseurl';
     HomePage,
     AboutPage,
 	MenuPage,
-	ContactPage
+	ContactPage,
+	  DishdetailPage
   ],
   providers: [
     StatusBar,
@@ -46,7 +51,9 @@ import { baseURL } from '../shared/baseurl';
     LeaderProvider,
     PromotionProvider,
     ProcessHttpmsgProvider,
-	{ provide: 'BaseURL', useValue: baseURL }
+	{ provide: 'BaseURL', useValue: baseURL },
+    FavoriteProvider
+   
   ]
 })
 export class AppModule {}

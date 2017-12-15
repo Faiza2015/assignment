@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Dish } from '../../shared/dish';
 import { Observable } from 'rxjs/Observable';
@@ -11,15 +10,16 @@ import 'rxjs/add/operator/catch';
 
 /*
   Generated class for the DishProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
+  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
+  for more info on providers and Angular 2 DI.
 */
 @Injectable()
 export class DishProvider {
+
   constructor(public http: Http,
               private processHTTPMsgService: ProcessHttpmsgProvider) { }
-getDishes(): Observable<Dish[]> {
+
+  getDishes(): Observable<Dish[]> {
     return this.http.get(baseURL + 'dishes')
                     .map(res => { return this.processHTTPMsgService.extractData(res); })
                     .catch(error => { return this.processHTTPMsgService.handleError(error); });
@@ -36,4 +36,5 @@ getDishes(): Observable<Dish[]> {
                     .map(res => { return this.processHTTPMsgService.extractData(res)[0]; })
                     .catch(error => { return this.processHTTPMsgService.handleError(error); });
   }
+
 }
