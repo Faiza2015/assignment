@@ -1,11 +1,12 @@
-import { Http, Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
 import { Dish } from '../../shared/dish';
 import { Observable } from 'rxjs/Observable';
 import { DishProvider } from '../dish/dish';
+import 'rxjs/add/operator/map';
 import { Storage } from '@ionic/storage';
 import { Favorite } from '../../shared/favorite';
-
 /*
   Generated class for the FavoriteProvider provider.
 
@@ -16,54 +17,74 @@ import { Favorite } from '../../shared/favorite';
 export class FavoriteProvider {
 
   favorites: Array<any>;
-favorite: Favorite={favorites: []};
-  constructor(public http: Http,  private dishservice: DishProvider,private storage: Storage) {
-    console.log('Hello FavoriteProvider Provider');
-    this.favorites = [];
-	 
+  
 
+  constructor(public http: Http, private dishservice: DishProvider,
+    private storage: Storage) {
+    console.log('Hello FavoriteProvider Provider');
+
+
+    
+   
+    this.storage.get('favorites').then(favorites => {
      
+      if( favorites ){
+        this.favorites = favorites;
+      } 
+       else {
+        this.favorites = [];
+      } 
+    });
+  
   }
 
- addFavorite(id: number): boolean {
+  addFavorite(id: number): boolean {
+   
     if (!this.isFavorite(id))
-      this.favorites.push(id);
-	  this.storage.set('favorites',this.favorites);
+       this.favorites.push(id);
+       this.storage.set('favorites', this.favorites);
+      
+    console.log('favorites', this.favorites);
     return true;
   }
 
+   getFavorites(): Observable<Dish[]> {
+    
+ 
+    return this.dishservice.getDishes()
+
+    
+     .map(dishes => dishes.filter(dish => this.favorites.some(el => el === dish.id)));
+     
+  } 
+
+ 
   isFavorite(id: number): boolean {
         return this.favorites.some(el => el === id);
   }
-deleteFavorite(id: number): Observable<Dish[]> {
+  deleteFavorite(id: number): Observable<Dish[]> {
+
+
     let index = this.favorites.indexOf(id);
+   // this.storage.remove('favorites'); 
     if (index >= 0) {
       this.favorites.splice(index,1);
-	  this.storage.set('favorites',this.favorites)
+      this.storage.set('favorites', this.favorites);
       return this.getFavorites();
     }
     else {
       console.log('Deleting non-existant favorite', id);
       return Observable.throw('Deleting non-existant favorite' + id);
-    }
+    }    
+   /*  this.favorites = this.favorites.filter(favorite => favorite !== id)
+    this.storage.remove('favorites');
+    this.storage.set('favorites', this.favorites);
+    return this.getFavorites(); */
+
+/* 
+    return this.getFavorites()
+    .map(favorite => favorite.filter( favorite=> this.storage.remove('favorites'))); */
   }
   
-  getFavorites(): Observable<Dish[]> {
 
-	   this.storage.get('favorites').then(favorites => {
-        if (favorites) {
-          console.log(favorites+'Hellooooo');
-          this.favorites = favorites;
-		   
-        }
-        else
-          console.log('favorites not defined');
-      });
-	  return this.dishservice.getDishes()
-      .map(dishes => dishes.filter(dish => this.favorites.some(el => el === dish.id)));
-         
-	  
-	
-
-  }
 }

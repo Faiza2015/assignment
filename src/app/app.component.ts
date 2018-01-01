@@ -61,7 +61,6 @@ constructor(public platform: Platform, public statusBar: StatusBar, public splas
   {
   let modal= this.modalCtrl.create(LoginPage);
   modal.present();
-  
-  
+
   }
 }

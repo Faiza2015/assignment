@@ -54,7 +54,8 @@ import { FavoriteProvider } from '../providers/favorite/favorite';
 	  DishdetailPage,
 	  FavoritesPage,
 	  ReservationPage,
-	  CommentPage,LoginPage
+	  CommentPage,
+	  LoginPage
   ],
   providers: [
     StatusBar,
